@@ -1,6 +1,5 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
-import {AppRegistry, StyleSheet, Text, View} from 'react-native';
 
 // Clear the existing HTML content
 document.body.innerHTML = '<div id="app"></div>';
@@ -9,7 +8,7 @@ document.body.innerHTML = '<div id="app"></div>';
 const root = createRoot(document.getElementById('app'));
 root.render(<h1>Hello, world</h1>);
 
-
+import {AppRegistry, StyleSheet, Text, View} from 'react-native';
 
 const HelloWorld = () => {
   return (
@@ -18,6 +17,20 @@ const HelloWorld = () => {
     </View>
   );
 };
+
+function checkNetworkSpeed() {
+    const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+  
+    if (connection) {
+      // Approximate speed based on connection.effectiveType
+      if (connection.effectiveType === 'slow-2g') {
+        console.log('User has a slow 2G connection');
+      } else {
+        console.log('User has a connection type:', connection.effectiveType);
+      }
+    }
+}
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -37,7 +50,7 @@ AppRegistry.registerComponent(
 
 private final int OVERLAY_PERMISSION_REQ_CODE = 1;  // Choose any value
 
-...
+// Assuming these lines belong to Java code, not JavaScript
 
 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
     if (!Settings.canDrawOverlays(this)) {
@@ -46,6 +59,7 @@ if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
         startActivityForResult(intent, OVERLAY_PERMISSION_REQ_CODE);
     }
 }
+
 @Override
 protected void onActivityResult(int requestCode, int resultCode, Intent data) {
     if (requestCode == OVERLAY_PERMISSION_REQ_CODE) {
@@ -93,67 +107,52 @@ public class MyReactActivity extends Activity implements DefaultHardwareBackBtnH
     public void invokeDefaultOnBackPressed() {
         super.onBackPressed();
     }
-}
-// Perform a “Sync Project files with Gradle” operation.
 
-// If you are using Android Studio, use Alt + Enter to add all missing imports in your MyReactActivity class. Be careful to use your package’s BuildConfig and not the one from the facebook package.
+    @Override
+    protected void onPause() {
+        super.onPause();
 
-// We need set the theme of MyReactActivity to Theme.AppCompat.Light.NoActionBar because some React Native UI components rely on this theme.
-
-
-<activity
-  android:name=".MyReactActivity"
-  android:label="@string/app_name"
-  android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-</activity>
-
-@Override
-protected void onPause() {
-    super.onPause();
-
-    if (mReactInstanceManager != null) {
-        mReactInstanceManager.onHostPause(this);
+        if (mReactInstanceManager != null) {
+            mReactInstanceManager.onHostPause(this);
+        }
     }
-}
 
-@Override
-protected void onResume() {
-    super.onResume();
+    @Override
+    protected void onResume() {
+        super.onResume();
 
-    if (mReactInstanceManager != null) {
-        mReactInstanceManager.onHostResume(this, this);
+        if (mReactInstanceManager != null) {
+            mReactInstanceManager.onHostResume(this, this);
+        }
     }
-}
-// need to pass some activity lifecycle callbacks to the ReactInstanceManager and ReactRootView:
-@Override
-protected void onDestroy() {
-    super.onDestroy();
 
-    if (mReactInstanceManager != null) {
-        mReactInstanceManager.onHostDestroy(this);
-    }
-    if (mReactRootView != null) {
-        mReactRootView.unmountReactApplication();
-    }
-}
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
 
-// need to pass back button events to React Native:
-@Override
- public void onBackPressed() {
-    if (mReactInstanceManager != null) {
-        mReactInstanceManager.onBackPressed();
-    } else {
-        super.onBackPressed();
+        if (mReactInstanceManager != null) {
+            mReactInstanceManager.onHostDestroy(this);
+        }
+        if (mReactRootView != null) {
+            mReactRootView.unmountReactApplication();
+        }
     }
-}
 
-// Finally, we need to hook up the dev menu. By default, this is activated by (rage) shaking the device, but this is not very useful in emulators. So we make it show when you press the hardware menu button (use Ctrl + M if you're using Android Studio emulator):
-
-@Override
-public boolean onKeyUp(int keyCode, KeyEvent event) {
-    if (keyCode == KeyEvent.KEYCODE_MENU && mReactInstanceManager != null) {
-        mReactInstanceManager.showDevOptionsDialog();
-        return true;
+    @Override
+    public void onBackPressed() {
+        if (mReactInstanceManager != null) {
+            mReactInstanceManager.onBackPressed();
+        } else {
+            super.onBackPressed();
+        }
     }
-    return super.onKeyUp(keyCode, event);
+
+    @Override
+    public boolean onKeyUp(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_MENU && mReactInstanceManager != null) {
+            mReactInstanceManager.showDevOptionsDialog();
+            return true;
+        }
+        return super.onKeyUp(keyCode, event);
+    }
 }
