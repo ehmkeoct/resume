@@ -1,0 +1,19 @@
+apply plugin: "com.android.application"
++apply plugin: "com.facebook.react"
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // Other dependencies here
++   implementation "com.facebook.react:react-android"
++   implementation "com.facebook.react:hermes-android"
+}
+
+
+
+
+
+// This needs to be at the very bottom
+apply from: file("../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesAppBuildGradle(project)
