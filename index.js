@@ -48,6 +48,8 @@ AppRegistry.registerComponent(
   () => HelloWorld,
 );
 
+// Commented out Java-specific code below
+/*
 private final int OVERLAY_PERMISSION_REQ_CODE = 1;  // Choose any value
 
 // Assuming these lines belong to Java code, not JavaScript
@@ -156,3 +158,4 @@ public class MyReactActivity extends Activity implements DefaultHardwareBackBtnH
         return super.onKeyUp(keyCode, event);
     }
 }
+*/
